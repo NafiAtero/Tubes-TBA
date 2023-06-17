@@ -12,15 +12,32 @@ def lexical_analyzer(input_string):
         current_lexeme += current_char
         
         # STRING
+        # ""
         if current_char == '"':
             # a"
             if current_lexeme[:-1] not in grammar.whitespace:
                 lexeme_list.append(current_lexeme[:-1])
                 current_lexeme = current_char
             # a "
-            
             i += 1
             while input_string[i] != '"':
+                current_lexeme += input_string[i]
+                i += 1
+            current_lexeme += input_string[i]
+            lexeme_list.append(current_lexeme)
+            current_lexeme = ""
+            i += 1
+            current_char = input_string[i]
+            current_lexeme += current_char
+        # ''
+        if current_char == "'":
+            # a"
+            if current_lexeme[:-1] not in grammar.whitespace:
+                lexeme_list.append(current_lexeme[:-1])
+                current_lexeme = current_char
+            # a "
+            i += 1
+            while input_string[i] != "'":
                 current_lexeme += input_string[i]
                 i += 1
             current_lexeme += input_string[i]
