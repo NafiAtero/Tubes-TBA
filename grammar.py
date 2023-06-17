@@ -2,11 +2,12 @@
 whitespace = [" ", "\t", ""]
 
 #DIVIDER
-punctuator = ["{", "}", "(", ")", ]
+punctuator = ["{", "}", "(", ")"]
+string_identifier = ['"', "'"]
 operator_relational = ["<", "<=", "==", ">=", ">", "!="]
 operator_arithmetic = ["+", "-", "*", "/"]
 other_dividers = ["=", ":=", ";", "\n", "!"]
-divider = punctuator + operator_arithmetic + operator_relational + other_dividers
+divider = punctuator + string_identifier + operator_arithmetic + operator_relational + other_dividers
 
 #ALPHABET
 alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '_']
