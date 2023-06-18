@@ -33,7 +33,7 @@ class Syntax_Analyzer:
             elif self.current_token in self.variable_list: pass
             else: 
                 self.output_string = "SYNTAX ERROR"
-                break
+                self.current_token_idx = len(self.token_list)
             
     def read_next_token(self):
         self.current_token_idx += 1
@@ -41,17 +41,46 @@ class Syntax_Analyzer:
         
     def syntax_error(self):
         self.output_string = "SYNTAX ERROR"
-        break
+        self.current_token_idx = len(self.token_list)
         
+    # is token integer
+    def is_integer(self):
+        try:
+            int(self.current_token)
+            return True
+        except:
+            return False
+        
+    # is token string
+    def is_string(self):
+        if self.current_token[0] == '"' and self.current_token[-1] == '"': return True
+        elif self.current_token[0] == "'" and self.current_token[-1] == "'": return True
+        else: return False
             
     def syntax_condition(self):
-        self.read_next_token()
-        if self.current_token in grammar.boolean:
+        # BOOL
+        if self.current_token in grammar.boolean: 
             return self.current_token
-        elif self.current_token in self.variable_list: pass
+        # VAR
+        elif self.current_token in self.variable_list: 
+            var_1 = self.current_token
+            self.read_next_token()
+            # relational operation
+            if self.current_token in grammar.operator_relational:
+                relational_operator = self.current_token
+                self.read_next_token()
+                var_2 = self.current_token
+                
+                
         
     def syntax_if(self):
-        pass
+        self.read_next_token()
+        # read condition
+        condition = self.syntax_condition(self)
+        # if condition true
+        if condition: pass
+        # if condition false
+        else: pass
         
 
 

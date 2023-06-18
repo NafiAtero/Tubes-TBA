@@ -16,7 +16,7 @@ numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 #KEYWORDS
 boolean = ["true", "false"]
 syntax = ["if", "var"]
-double_length_symbol_start = ["\\", "<", ">", "="]
+# double_length_symbol_start = ["\\", "<", ">", "="]
 
 symbols = whitespace + punctuator + alphabet + numbers + boolean + syntax + operator_arithmetic + operator_relational
 

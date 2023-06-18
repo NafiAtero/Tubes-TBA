@@ -31,11 +31,11 @@ def lexical_analyzer(input_string):
             current_lexeme += current_char
         # ''
         if current_char == "'":
-            # a"
+            # a'
             if current_lexeme[:-1] not in grammar.whitespace:
                 lexeme_list.append(current_lexeme[:-1])
                 current_lexeme = current_char
-            # a "
+            # a '
             i += 1
             while input_string[i] != "'":
                 current_lexeme += input_string[i]
@@ -51,7 +51,7 @@ def lexical_analyzer(input_string):
 
         
         # DIVIDER
-        #  ()
+        # ()
         if input_string[i:i+2] in grammar.divider:
             if current_lexeme[:-1] not in grammar.whitespace:
                 lexeme_list.append(current_lexeme[:-1])
