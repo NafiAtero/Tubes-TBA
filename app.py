@@ -4,6 +4,8 @@ from tkinter import *
 from tkinter import ttk
 
 def parse_input():
+    token_frame_textbox.config(state=NORMAL)
+    output_frame_textbox.config(state=NORMAL)
     input_string = input_frame_textbox.get("1.0", END)
     output_string, token_string = parser.parse_string(input_string)
     
@@ -11,9 +13,11 @@ def parse_input():
     token_frame_textbox.insert("1.0", token_string)
     output_frame_textbox.delete("1.0", END)
     output_frame_textbox.insert("1.0", output_string)
+    token_frame_textbox.config(state=DISABLED)
+    output_frame_textbox.config(state=DISABLED)
 
 outer = Tk()
-outer.geometry("430x850")
+#outer.geometry("430x850")
 outer.title("Lexical Analyzer/Parser")
 
 root = Frame(outer)
@@ -42,6 +46,7 @@ input_frame_textbox.pack()
 token_frame = Frame(root, bd=3)
 token_frame_title = Label(token_frame, text="Tokens", font=("Arial", 14))
 token_frame_textbox = Text(token_frame, height=20, width=50)
+token_frame_textbox.config(state=DISABLED)
 
 # TOKEN RENDER
 token_frame_title.pack()
@@ -51,7 +56,8 @@ token_frame_textbox.pack()
 # OUTPUT
 output_frame = Frame(root, bd=3)
 output_frame_title = Label(output_frame, text="Output text", font=("Arial", 14))
-output_frame_textbox = Text(output_frame, height=3, width=50)
+output_frame_textbox = Text(output_frame, height=5, width=50)
+output_frame_textbox.config(state=DISABLED)
 
 # OUTPUT RENDER
 output_frame_title.pack()
