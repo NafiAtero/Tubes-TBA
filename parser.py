@@ -21,11 +21,24 @@ def lexical_analyzer(input_string):
             # a "
             i += 1
             while input_string[i] != '"':
+                if input_string[i] == "\n":
+                    lexeme_list.append(current_lexeme[0]) # "
+                    lexeme_list.append(current_lexeme[1]) # a
+                    lexeme_list.append(input_string[i]) # \n
+                    current_lexeme = ""
+                    i += 1
                 current_lexeme += input_string[i]
                 i += 1
-            current_lexeme += input_string[i]
-            lexeme_list.append(current_lexeme)
-            current_lexeme = ""
+            if current_lexeme[0] == '"':
+                current_lexeme += input_string[i]
+                lexeme_list.append(current_lexeme)
+                current_lexeme = ""
+            else: 
+                lexeme_list.append(current_lexeme)
+                current_lexeme = ""
+                lexeme_list.append(input_string[i])
+                
+            
             i += 1
             current_char = input_string[i]
             current_lexeme += current_char
