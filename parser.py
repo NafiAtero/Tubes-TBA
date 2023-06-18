@@ -104,7 +104,7 @@ def lexical_analyzer(input_string):
 def parse_string(input_string):
     token_list = lexical_analyzer(input_string)
     
-    token_string = ""
+    token_string = "length: " + str(len(token_list)) + "\n"
     curr_token_idx = -1
     for i in token_list:
         

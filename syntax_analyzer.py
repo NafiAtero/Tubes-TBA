@@ -1,12 +1,14 @@
 import grammar
 
-
-
 class Variable:
-    def __init__(self, var_name, var_type, var_value):
+    def __init__(self, var_name, var_type, var_value=""):
         self.var_name = var_name
         self.var_type = var_type
-        self.var_value = var_value
+        if var_value == "":
+            if self.var_type == "string": self.var_value = ""
+            elif self.var_type == "int": self.var_value = "0"
+            elif self.var_type == "bool": self.var_value = "false"
+        else: self.var_value = var_value
         
     def __repr__(self):
         return f'{self.var_name}'
@@ -19,7 +21,6 @@ class Syntax_Analyzer:
         self.token_list = token_list
 
         self.output_string = ""
-        self.current_state = ""
         self.variable_list = []
         self.current_token_idx = 0
         self.current_token = self.token_list[self.current_token_idx]
@@ -27,16 +28,13 @@ class Syntax_Analyzer:
         self.mainloop()
         
     def mainloop(self) :
-        while self.current_token_idx < len(self.token_list):
+        while self.current_token_idx < len(self.token_list) - 1:
             if self.current_token == "\n": self.read_next_token()
             elif self.current_token == "if": self.syntax_if()
             elif self.current_token == "var": self.syntax_var()
-            elif self.current_token == "print": self.print_function()
-            elif self.current_token in self.variable_list: pass
+            elif self.current_token == "fmt.Println": self.print_function()
             elif self.current_token in grammar.other_dividers: self.read_next_token()
-            else: 
-                self.output_string += "SYNTAX ERROR. current token: " + self.current_token + "\n"
-                self.current_token_idx = len(self.token_list)
+            else: self.syntax_error("mainloop error")
             
     def read_next_token(self):
         self.current_token_idx += 1
@@ -45,21 +43,30 @@ class Syntax_Analyzer:
         
         
     def syntax_error(self, message=""):
-        self.output_string += "SYNTAX ERROR. " + message + " current token: " + self.current_token + "\n"
+        self.output_string += "ERROR. " + message + "\ncurrent token: " + self.current_token + " [" + str(self.current_token_idx) + "]" + "\n"
         self.current_token_idx = len(self.token_list)
         
     # is token integer
     def is_integer(self, token):
-        try:
-            int(token)
-            return True
-        except:
-            return False
+        for i in token:
+            if i not in grammar.numbers: return False
+        return True
         
     # is token string
     def is_string(self, token):
         if token[0] == '"' and token[-1] == '"': return True
         elif token[0] == "'" and token[-1] == "'": return True
+        else: return False
+        
+    # is token bool
+    def is_bool(self, token):
+        if token in grammar.boolean: return True
+        else: return False
+        
+    def type_match(self, var_type, var_val):
+        if var_type == "string" and self.is_string(var_val): return True
+        elif var_type == "int" and self.is_integer(var_val): return True
+        elif var_type == "bool" and self.is_bool(var_val): return True
         else: return False
     
     # is variable declared
@@ -89,15 +96,11 @@ class Syntax_Analyzer:
                 return
             self.read_next_token()
             self.read_next_token()
-        else: self.syntax_error()
+            
+        else: self.syntax_error("expected (")
+        
         
     def syntax_var(self):
-        self.read_next_token() # read var type
-        if self.current_token in grammar.data_type:
-            new_var_type = self.current_token
-        else: 
-            self.syntax_error("invalid var type")
-            return
         self.read_next_token() # read var name
         if self.is_declared(self.current_token): # var name already exists
             self.syntax_error("variable " + self.current_token + " already exists")
@@ -106,27 +109,34 @@ class Syntax_Analyzer:
         else: 
             self.syntax_error("invalid var name")
             return
+        
+        self.read_next_token() # read var type
+        if self.current_token in grammar.data_type:
+            new_var_type = self.current_token
+        else: 
+            self.syntax_error("invalid var type " + self.current_token)
+            return
         self.read_next_token()
+        
         if self.current_token == "=":
             self.read_next_token() # read var value
             new_var_val = self.current_token
-            self.read_next_token()
-        
-        if self.current_token in grammar.end_of_line:
+            
+        if self.type_match(new_var_type, new_var_val):
             new_var = Variable(new_var_name, new_var_type, new_var_val)
             self.variable_list.append(Variable(new_var_name, new_var_type, new_var_val))
             self.read_next_token()
+        else: self.syntax_error(new_var_val + " is not type " + new_var_type)
             
             
                 
             
     def syntax_condition(self):
-        print("condition")
         # BOOL
         if self.current_token in grammar.boolean: 
             return self.current_token
         # VAR
-        elif self.current_token in self.variable_list: 
+        elif self.is_declared(self.current_token): 
             var_1 = self.is_declared(self.current_token, True)
             self.read_next_token()
             operator = self.current_token
@@ -134,23 +144,23 @@ class Syntax_Analyzer:
             var_2 = self.is_declared(self.current_token, True)
             # int relational operation
             if operator in grammar.operator_relational:
-                if self.is_integer(var_1) and self.is_integer(var_2):
-                    if relational_operator == "<":
+                if self.is_integer(var_1.var_value) and self.is_integer(var_2.var_value):
+                    if operator == "<":
                         if int(var_1.var_value) < int(var_2.var_value): return "true"
                         else: return "false"
-                    if relational_operator == "<=":
+                    if operator == "<=":
                         if int(var_1.var_value) <= int(var_2.var_value): return "true"
                         else: return "false"
-                    if relational_operator == "==":
+                    if operator == "==":
                         if int(var_1.var_value) == int(var_2.var_value): return "true"
                         else: return "false"
-                    if relational_operator == ">":
+                    if operator == ">":
                         if int(var_1.var_value) > int(var_2.var_value): return "true"
                         else: return "false"
-                    if relational_operator == ">=":
+                    if operator == ">=":
                         if int(var_1.var_value) >= int(var_2.var_value): return "true"
                         else: return "false"
-                    if relational_operator == "!=":
+                    if operator == "!=":
                         if int(var_1.var_value) != int(var_2.var_value): return "true"
                         else: return "false"
                 else: 
@@ -163,7 +173,7 @@ class Syntax_Analyzer:
             
             # syntax error
             else: 
-                self.syntax_error()
+                self.syntax_error("expected relational operation")
                 return "false"
                 
                 
@@ -174,26 +184,42 @@ class Syntax_Analyzer:
         # read condition
         condition = self.syntax_condition()
         
-        # (
+        # read (
         self.read_next_token()
         if self.current_token != "(":
-            self.syntax_error()
+            self.syntax_error("expected (")
             return
+        
         self.read_next_token()
         # if condition true
         if condition == "true": 
-            self.mainloop()
+            parentheses_stack = 1
+            while parentheses_stack > 0:
+                if self.current_token_idx == len(self.token_list): 
+                    self.syntax_error("f expected " + str(parentheses_stack) + " )")
+                    break
+                if self.current_token == "(" : parentheses_stack += 1
+                elif self.current_token == ")" : parentheses_stack -= 1
+                
+                if self.current_token == "\n": self.read_next_token()
+                elif self.current_token == "if": self.syntax_if()
+                elif self.current_token == "var": self.syntax_var()
+                elif self.current_token == "fmt.Println": self.print_function()
+            self.read_next_token()
+
         
         # if condition false
         else: 
-            while self.current_token != ")":
+            parentheses_stack = 1
+            while parentheses_stack > 0:
+                if self.current_token_idx == len(self.token_list): 
+                    self.syntax_error("f expected " + str(parentheses_stack) + " )")
+                    break
+                if self.current_token == "(" : parentheses_stack += 1
+                elif self.current_token == ")" : parentheses_stack -= 1
                 self.read_next_token()
-
-        # )
-        if self.current_token != "(":
-            self.syntax_error()
-            return
-        self.read_next_token()
+            
+            
         
 
 
