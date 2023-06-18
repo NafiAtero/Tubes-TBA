@@ -214,11 +214,6 @@ class Syntax_Analyzer:
         if condition == "true": 
             brackets_stack = 1
             while brackets_stack > 0:
-                print(self.current_token_idx)
-                print(self.current_token)
-                print(self.token_list)
-                print(len(self.token_list))
-                print(brackets_stack)
                 
                 if self.current_token_idx > len(self.token_list): 
                     self.syntax_error("f expected " + str(brackets_stack) + " }")
