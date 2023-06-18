@@ -33,7 +33,6 @@ class Syntax_Analyzer:
         
     def mainloop(self) :
         while self.current_token_idx < len(self.token_list):
-            print("main")
             if self.current_token == "\n": self.read_next_token()
             elif self.current_token == "if": self.syntax_if()
             elif self.current_token == "var": self.syntax_var()
@@ -143,41 +142,53 @@ class Syntax_Analyzer:
         # BOOL
         if self.current_token in grammar.boolean: 
             return self.current_token
-        # VAR
-        elif self.is_declared(self.current_token): 
-            var_1 = self.is_declared(self.current_token, True)
-            self.read_next_token()
-            operator = self.current_token
-            self.read_next_token()
-            var_2 = self.is_declared(self.current_token, True)
+        else:
+            # VAR
+            if self.is_declared(self.current_token): 
+                var_1 = self.is_declared(self.current_token, True).var_value
+                self.read_next_token()
+                operator = self.current_token
+                self.read_next_token()
+                var_2 = self.is_declared(self.current_token, True).var_value
+            # NOT VAR
+            else:
+                var_1 = self.current_token
+                self.read_next_token()
+                operator = self.current_token
+                self.read_next_token()
+                var_2 = self.current_token
             # int relational operation
-            if operator in grammar.operator_relational:
-                if self.is_integer(var_1.var_value) and self.is_integer(var_2.var_value):
+            if self.is_integer(var_1) and self.is_integer(var_2):
+                if operator in grammar.operator_relational:
                     if operator == "<":
-                        if int(var_1.var_value) < int(var_2.var_value): return "true"
+                        if int(var_1) < int(var_2): return "true"
                         else: return "false"
                     if operator == "<=":
-                        if int(var_1.var_value) <= int(var_2.var_value): return "true"
+                        if int(var_1) <= int(var_2): return "true"
                         else: return "false"
                     if operator == "==":
-                        if int(var_1.var_value) == int(var_2.var_value): return "true"
+                        if int(var_1) == int(var_2): return "true"
                         else: return "false"
                     if operator == ">":
-                        if int(var_1.var_value) > int(var_2.var_value): return "true"
+                        if int(var_1) > int(var_2): return "true"
                         else: return "false"
                     if operator == ">=":
-                        if int(var_1.var_value) >= int(var_2.var_value): return "true"
+                        if int(var_1) >= int(var_2): return "true"
                         else: return "false"
                     if operator == "!=":
-                        if int(var_1.var_value) != int(var_2.var_value): return "true"
+                        if int(var_1) != int(var_2): return "true"
                         else: return "false"
                 else: 
                     self.syntax_error("can't compare non integers")
                     return "false"
             # == string
-            elif self.is_string(var_1.var_value) and self.is_string(var_2.var_value):
-                if var_1.var_value[1:-1] == var_2.var_value[1:-1]: return "true"
-                else: return "false"
+            elif self.is_string(var_1) and self.is_string(var_2):
+                if operator == "==":
+                    if var_1[1:-1] == var_2[1:-1]: return "true"
+                    else: return "false"
+                else: self.syntax_error("can only compare two strings with ==")
+            
+        
             
             # syntax error
             else: 
@@ -203,18 +214,27 @@ class Syntax_Analyzer:
         if condition == "true": 
             brackets_stack = 1
             while brackets_stack > 0:
-                if self.current_token_idx == len(self.token_list): 
+                print(self.current_token_idx)
+                print(self.current_token)
+                print(self.token_list)
+                print(len(self.token_list))
+                print(brackets_stack)
+                
+                if self.current_token_idx > len(self.token_list): 
                     self.syntax_error("f expected " + str(brackets_stack) + " }")
                     break
                 if self.current_token == "{" : brackets_stack += 1
                 elif self.current_token == "}" : brackets_stack -= 1
                 
-                if self.current_token == "\n": self.read_next_token()
+                elif self.current_token == "\n": self.read_next_token()
                 elif self.current_token == "if": self.syntax_if()
                 elif self.current_token == "var": self.syntax_var()
                 elif self.current_token == "fmt.Println": self.print_function()
+                else: 
+                    self.syntax_error("ifloop error")
+                    break
             self.read_next_token()
-
+                
         
         # if condition false
         else: 
