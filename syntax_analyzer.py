@@ -47,7 +47,7 @@ class Syntax_Analyzer:
         
         
     def syntax_error(self, message=""):
-        self.output_string += "ERROR. " + message + "\ncurrent token: " + self.current_token + " [" + str(self.current_token_idx) + "]" + "\n"
+        self.output_string += "Syntax Invalid!" + "\n" + "ERROR. " + message + "\ncurrent token: " + self.current_token + " [" + str(self.current_token_idx) + "]" + "\n"
         self.current_token_idx = len(self.token_list)
         
     # is token integer
@@ -88,13 +88,13 @@ class Syntax_Analyzer:
             self.read_next_token()
             # print string
             if self.is_string(self.current_token) and self.token_list[self.current_token_idx+1] == ")":
-                self.output_string += self.current_token[1:-1] + "\n"
+                self.output_string += "Syntax Valid!" + "\n" + self.current_token[1:-1] + "\n"
             # print variable
             elif self.is_declared(self.current_token) and self.token_list[self.current_token_idx+1] == ")":
                 if self.is_declared(self.current_token, True).var_type == "string":
-                    self.output_string += self.is_declared(self.current_token, True).var_value[1:-1] + "\n"
+                    self.output_string += "Syntax Valid!" + "\n" + self.is_declared(self.current_token, True).var_value[1:-1] + "\n"
                 else:
-                    self.output_string += self.is_declared(self.current_token, True).var_value + "\n"
+                    self.output_string += "Syntax Valid!" + "\n" + self.is_declared(self.current_token, True).var_value + "\n"
             else: 
                 self.syntax_error("invalid variable")    
                 return
@@ -188,14 +188,11 @@ class Syntax_Analyzer:
                     else: return "false"
                 else: self.syntax_error("can only compare two strings with ==")
             
-        
             
             # syntax error
             else: 
                 self.syntax_error("expected relational operation")
                 return "false"
-                
-                
                 
         
     def syntax_if(self):
