@@ -25,7 +25,7 @@ root = Frame(outer)
 # TITLE
 title_frame = Frame(root, bd=3)
 title_frame_main_title = Label(title_frame, text="Lexical Analyzer/Parser", font=("Arial", 18))
-title_frame_text = Label(title_frame, text="bla bla bla", font=("Arial", 12))
+title_frame_text = Label(title_frame, text="If GO", font=("Arial", 12))
 
 # TITLE RENDER
 title_frame_main_title.pack()
@@ -55,7 +55,7 @@ token_frame_textbox.pack()
 
 # OUTPUT
 output_frame = Frame(root, bd=3)
-output_frame_title = Label(output_frame, text="Output text", font=("Arial", 12))
+output_frame_title = Label(output_frame, text="Output text", font=("Arial", 14))
 output_frame_textbox = Text(output_frame, height=5, width=50, font=("Courier", 12))
 output_frame_textbox.config(state=DISABLED)
 
