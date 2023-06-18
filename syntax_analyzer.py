@@ -122,11 +122,14 @@ class Syntax_Analyzer:
             self.read_next_token() # read var value
             new_var_val = self.current_token
             
-        if self.type_match(new_var_type, new_var_val):
-            new_var = Variable(new_var_name, new_var_type, new_var_val)
-            self.variable_list.append(Variable(new_var_name, new_var_type, new_var_val))
-            self.read_next_token()
-        else: self.syntax_error(new_var_val + " is not type " + new_var_type)
+            if self.type_match(new_var_type, new_var_val):
+                self.variable_list.append(Variable(new_var_name, new_var_type, new_var_val))
+            else: self.syntax_error(new_var_val + " is not type " + new_var_type)
+        
+        else: 
+            self.variable_list.append(Variable(new_var_name, new_var_type))
+        
+        self.read_next_token()
             
             
                 
