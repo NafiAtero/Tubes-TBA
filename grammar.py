@@ -6,7 +6,8 @@ punctuator = ["{", "}", "(", ")"]
 string_identifier = ['"', "'"]
 operator_relational = ["<", "<=", "==", ">=", ">", "!="]
 operator_arithmetic = ["+", "-", "*", "/"]
-other_dividers = ["=", ":=", ";", "\n", "!"]
+end_of_line = [";", "\n"]
+other_dividers = ["=", ":=", "!"]
 divider = punctuator + string_identifier + operator_arithmetic + operator_relational + other_dividers
 
 #ALPHABET
@@ -25,4 +26,3 @@ for i in symbols:
     if len(i) > 1:
         double_length_symbol.append(i)
         
-
