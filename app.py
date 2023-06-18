@@ -35,7 +35,7 @@ title_frame_text.pack()
 # INPUT
 input_frame = Frame(root, bd=3)
 input_frame_title = Label(input_frame, text="Input text", font=("Arial", 14))
-input_frame_textbox = Text(input_frame, height=15, width=50)
+input_frame_textbox = Text(input_frame, height=15, width=50, font=("Courier", 12))
 
 # INPUT RENDER
 input_frame_title.pack()
@@ -45,7 +45,7 @@ input_frame_textbox.pack()
 # TOKEN
 token_frame = Frame(root, bd=3)
 token_frame_title = Label(token_frame, text="Tokens", font=("Arial", 14))
-token_frame_textbox = Text(token_frame, height=20, width=50)
+token_frame_textbox = Text(token_frame, height=20, width=50, font=("Courier", 12))
 token_frame_textbox.config(state=DISABLED)
 
 # TOKEN RENDER
@@ -55,8 +55,8 @@ token_frame_textbox.pack()
 
 # OUTPUT
 output_frame = Frame(root, bd=3)
-output_frame_title = Label(output_frame, text="Output text", font=("Arial", 14))
-output_frame_textbox = Text(output_frame, height=5, width=50)
+output_frame_title = Label(output_frame, text="Output text", font=("Arial", 12))
+output_frame_textbox = Text(output_frame, height=5, width=50, font=("Courier", 12))
 output_frame_textbox.config(state=DISABLED)
 
 # OUTPUT RENDER
