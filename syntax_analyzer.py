@@ -189,20 +189,20 @@ class Syntax_Analyzer:
         
         # read (
         self.read_next_token()
-        if self.current_token != "(":
-            self.syntax_error("expected (")
+        if self.current_token != "{":
+            self.syntax_error("expected {")
             return
         
         self.read_next_token()
         # if condition true
         if condition == "true": 
-            parentheses_stack = 1
-            while parentheses_stack > 0:
+            brackets_stack = 1
+            while brackets_stack > 0:
                 if self.current_token_idx == len(self.token_list): 
-                    self.syntax_error("f expected " + str(parentheses_stack) + " )")
+                    self.syntax_error("f expected " + str(brackets_stack) + " }")
                     break
-                if self.current_token == "(" : parentheses_stack += 1
-                elif self.current_token == ")" : parentheses_stack -= 1
+                if self.current_token == "{" : brackets_stack += 1
+                elif self.current_token == "}" : brackets_stack -= 1
                 
                 if self.current_token == "\n": self.read_next_token()
                 elif self.current_token == "if": self.syntax_if()
@@ -213,13 +213,13 @@ class Syntax_Analyzer:
         
         # if condition false
         else: 
-            parentheses_stack = 1
-            while parentheses_stack > 0:
+            brackets_stack = 1
+            while brackets_stack > 0:
                 if self.current_token_idx == len(self.token_list): 
-                    self.syntax_error("f expected " + str(parentheses_stack) + " )")
+                    self.syntax_error("f expected " + str(brackets_stack) + " }")
                     break
-                if self.current_token == "(" : parentheses_stack += 1
-                elif self.current_token == ")" : parentheses_stack -= 1
+                if self.current_token == "{" : brackets_stack += 1
+                elif self.current_token == "}" : brackets_stack -= 1
                 self.read_next_token()
             
             
