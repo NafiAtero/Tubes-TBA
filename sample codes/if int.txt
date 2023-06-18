@@ -1,0 +1,9 @@
+if 2 == 2 {
+    fmt.Println("a")
+}
+if 4 >= 2 {
+    fmt.Println("b")
+}
+if 2 < 1 {
+    fmt.Println("c")
+}

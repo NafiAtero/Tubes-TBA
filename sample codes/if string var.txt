@@ -1,0 +1,6 @@
+var a string = "a"
+var b string = "a"
+
+if a == b {
+    fmt.Println("b")
+}

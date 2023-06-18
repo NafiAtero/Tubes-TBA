@@ -1,0 +1,13 @@
+var x int = 2
+var y int = 3
+var z int = 4
+
+if x == x {
+    fmt.Println("a")
+}
+if z >= x {
+    fmt.Println("b")
+}
+if z < y {
+    fmt.Println("c")
+}

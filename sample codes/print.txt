@@ -1,0 +1,4 @@
+fmt.Println("a")
+
+var b string = "b"
+fmt.Println(b)
