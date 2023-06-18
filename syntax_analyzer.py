@@ -22,13 +22,18 @@ class Syntax_Analyzer:
 
         self.output_string = ""
         self.variable_list = []
+        self.current_token = ""
         self.current_token_idx = 0
-        self.current_token = self.token_list[self.current_token_idx]
+
+        if len(self.token_list) == 0: self.syntax_error("Input empty")
+        else: 
+            self.current_token = self.token_list[self.current_token_idx]
+            self.mainloop()
         
-        self.mainloop()
         
     def mainloop(self) :
-        while self.current_token_idx < len(self.token_list) - 1:
+        while self.current_token_idx < len(self.token_list):
+            print("main")
             if self.current_token == "\n": self.read_next_token()
             elif self.current_token == "if": self.syntax_if()
             elif self.current_token == "var": self.syntax_var()
